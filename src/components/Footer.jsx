@@ -1,11 +1,15 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Globe, Share2, Zap } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Footer = () => {
   const { t } = useLanguage();
-  
+  const location = useLocation();
+
+  // Hide footer on full-page dashboard routes that have their own layout
+  if (location.pathname.startsWith('/delivery-dashboard')) return null;
+
   const socialLinks = [
     { icon: <Globe size={18} />, href: '#' },
     { icon: <Share2 size={18} />, href: '#' },
@@ -75,31 +79,33 @@ const Footer = () => {
           </div>
 
           {/* Links Sections */}
-          {footerSections.map(section => (
-            <div key={section.title}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '1.5rem', position: 'relative' }}>
-                {section.title}
-                <span style={{ position: 'absolute', bottom: '-8px', left: 0, width: '30px', height: '2px', backgroundColor: '#3b82f6' }}></span>
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {section.links.map(link => (
-                  <Link key={link.name} to={link.path} style={{ 
-                    color: link.color || 'rgba(255,255,255,0.7)', fontSize: '0.95rem', transition: 'all 0.2s ease', textDecoration: 'none', display: 'block'
-                  }}
-                  onMouseOver={e => {
-                    e.currentTarget.style.color = '#3b82f6';
-                    e.currentTarget.style.paddingLeft = '8px';
-                  }}
-                  onMouseOut={e => {
-                    e.currentTarget.style.color = link.color || 'rgba(255,255,255,0.7)';
-                    e.currentTarget.style.paddingLeft = '0';
-                  }}>
-                    {link.name}
-                  </Link>
-                ))}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '3.5rem' }}>
+            {footerSections.map(section => (
+              <div key={section.title}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '1.5rem', position: 'relative' }}>
+                  {section.title}
+                  <span style={{ position: 'absolute', bottom: '-8px', left: 0, width: '30px', height: '2px', backgroundColor: '#3b82f6' }}></span>
+                </h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {section.links.map(link => (
+                    <Link key={link.name} to={link.path} style={{ 
+                      color: link.color || 'rgba(255,255,255,0.7)', fontSize: '0.95rem', transition: 'all 0.2s ease', textDecoration: 'none', display: 'block'
+                    }}
+                    onMouseOver={e => {
+                      e.currentTarget.style.color = '#3b82f6';
+                      e.currentTarget.style.paddingLeft = '8px';
+                    }}
+                    onMouseOut={e => {
+                      e.currentTarget.style.color = link.color || 'rgba(255,255,255,0.7)';
+                      e.currentTarget.style.paddingLeft = '0';
+                    }}>
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Contact Info */}
           <div>
@@ -114,6 +120,10 @@ const Footer = () => {
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <MapPin size={18} color="#3b82f6" style={{ flexShrink: 0 }} />
                 <span style={{ opacity: 0.8, fontSize: '0.95rem' }}>Thiran 360 AI</span>
+              </div>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <Phone size={18} color="#3b82f6" style={{ flexShrink: 0 }} />
+                <span style={{ opacity: 0.8, fontSize: '0.95rem', fontWeight: '500' }}>9842743053</span>
               </div>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <Phone size={18} color="#3b82f6" style={{ flexShrink: 0 }} />
@@ -136,10 +146,7 @@ const Footer = () => {
           opacity: 0.6
         }}>
           <p>© 2026 Service. {t("All rights reserved.", "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.")}</p>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <Link to="/privacy-policy" style={{ cursor: 'pointer', color: 'inherit', textDecoration: 'none' }}>{t('Privacy Policy', 'தனியுரிமைக் கொள்கை')}</Link>
-            <span style={{ cursor: 'pointer' }}>{t('Terms of Service', 'சேவை விதிமுறைகள்')}</span>
-          </div>
+
         </div>
       </div>
     </footer>
